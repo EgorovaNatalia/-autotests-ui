@@ -1,0 +1,4 @@
+browser-state.json
+.DS_Store
+__pycache__/
+*.py[cod]
