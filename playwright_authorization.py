@@ -1,29 +1,31 @@
-from playwright.sync_api import sync_playwright, expect  # Импорт Playwright для синхронного режима и проверки
+from playwright.sync_api import sync_playwright, expect
 
-# Запуск Playwright в синхронном режиме
 with sync_playwright() as playwright:
-    # Открываем браузер Chromium (не в headless режиме, чтобы видеть действия)
+    # Открываем браузер и создаем новую страницу
     browser = playwright.chromium.launch(headless=False)
-    page = browser.new_page()  # Создаем новую страницу
+    page = browser.new_page()
 
-    # Переходим на страницу авторизации
+    # Переходим на страницу входа
     page.goto("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/login")
 
-    # Находим поле "Email" и заполняем его
+    # Заполняем поле email
     email_input = page.get_by_test_id('login-form-email-input').locator('input')
-    email_input.fill("user@gmail.com")
+    email_input.fill("user.name@gmail.com")
 
-    # Находим поле "Password" и заполняем его
+    # Заполняем поле пароль
     password_input = page.get_by_test_id('login-form-password-input').locator('input')
     password_input.fill("password")
 
-    # Находим кнопку "Login" и кликаем на нее
+    # Нажимаем на кнопку Login
     login_button = page.get_by_test_id('login-page-login-button')
     login_button.click()
 
     # Проверяем, что появилось сообщение об ошибке
     wrong_email_or_password_alert = page.get_by_test_id('login-page-wrong-email-or-password-alert')
-    expect(wrong_email_or_password_alert).to_be_visible() # Проверяем видимость элемента
-    expect(wrong_email_or_password_alert).to_have_text("Wrong email or password") # Проверяем текст
-    # Пауза на 5 секунд, чтобы увидеть результат
+    expect(wrong_email_or_password_alert).to_be_visible()
+    expect(wrong_email_or_password_alert).to_have_text("Wrong email or password")
+
+    # Задержка для наглядности выполнения теста (не рекомендуется использовать в реальных автотестах)
     page.wait_for_timeout(5000)
+
+
